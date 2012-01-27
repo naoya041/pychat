@@ -1,7 +1,11 @@
 import socket
 
 class Client():
-	def __init__(chatType="default"):
+	def __init__(clientType="default"):
 		pass
 
-connType = input("1. Google talk\r\n")
+	def initXmpp():
+		pass
+
+if __name__ == '__main__':
+	connType = input("1. Google talk\r\n")
