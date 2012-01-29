@@ -1,34 +1,37 @@
 import socket
 
 class Client():
-	def __init__(self, serverIp="193.219.128.49", serverPort=6667, clientType="irc"):
-		self.status = "initializing"
-		if clientType == "irc":
-			self.clientType = "irc"
-			self.serverIp = serverIp
-			self.serverPort = serverPort
-			self.initIRC()
+	def __init__(self, attributes):
+		self.attributes = attributes
 
-	def initXMPP(self):
-		#TODO
-		pass
-
-	def initIRC(self):
-		self.status = "connecting"
+	def connect(self):
 		self.tcpsoc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		try:
-			self.tcpsoc.connect((self.serverIp, self.serverPort))
-			self.tcpsoc.recv(1024)
-			self.tcpsoc.recv(1024)
-		except:
-			print('Could not establish a connection with the server at this time')
-			return False
+		print('created socket')
+		if self.attributes['protocol'] == 'irc':
+			try:
+				self.tcpsoc.connect((self.attributes['server'], self.attributes['port']))
+				print('connected')
+			except:
+				return False
+		print(str(self.tcpsoc.recv(1024), 'ascii'), end="")
+		print(str(self.tcpsoc.recv(1024), 'ascii'))
+		print(str(self.tcpsoc.recv(1024), 'ascii'))
+		self.tcpsoc.send(bytes('NICK '+self.attributes['nickname']+'\r\n', 'ascii'))
+		self.tcpsoc.send(bytes('USER  '+self.attributes['username']+' 0 *  : '+self.attributes['realname']+'\r\n', 'ascii'))
+		print(str(self.tcpsoc.recv(1024), 'ascii'))
 
-	def IRC(self):
-		pass
-
-	def quit(self):
+	def disconnect(self):
 		self.tcpsoc.close()
 
 if __name__ == '__main__':
-	client = Client()
+	setup = {
+		'server':   '193.219.128.49',
+		'port':     6667,
+		'protocol': 'irc',
+		'nickname': 'PythonChatClient',
+		'username': 'jacobvalenta',
+		'realname': 'Jacob Valenta',
+	}
+	client = Client(setup)
+	client.connect()
+	client.disconnect()
