@@ -1,7 +1,7 @@
 #Pychat by Jacob Valenta
 #Released under Creative Commons 0
 #I dedicate this work to the public domain
-from PIL import Image, tkimage
+from PIL import Image, Tkimage
 from tkinter import *
 import socket
 import threading
