@@ -1,7 +1,8 @@
 #Pychat by Jacob Valenta
 #Released under Creative Commons 0
 #I dedicate this work to the public domain
-from PIL import Image, Tkimage
+from PIL import Image as Pillage
+from PIL import ImageTk
 from tkinter import *
 import socket
 import threading
@@ -18,13 +19,14 @@ class Client(Frame):
 		self.mainloop()
 
 	def displaySettings(self):
-		self.protocolInt = IntVar()
+		self.protocolInt = StringVar()
 
 		self.background = Canvas(self, background="white", width=235, height=200, borderwidth=1, relief='flat')
 		self.background.grid(row=0, column=0, columnspan=15, rowspan=20)
 
-		self.optionIRC = Radiobutton(self, text="IRC", variable=self.protocolInt, background="white", activebackground="white", width=4, value=1)
-		self.optionXMPP = Radiobutton(self, text="XMPP", variable=self.protocolInt, background="white", activebackground="white", width=4, value=2)
+		self.optionIRC = Radiobutton(self, text="IRC", variable=self.protocolInt, background="white", activebackground="white", width=4, value="irc")
+		self.optionXMPP = Radiobutton(self, text="XMPP", variable=self.protocolInt, background="white", activebackground="white", width=4, value="xmpp", state=DISABLED)
+		self.optionIRC.select()
 		self.optionIRC.grid(row=1, column=5, columnspan=4)
 		self.optionXMPP.grid(row=1, column=9, columnspan=4)
 
@@ -50,8 +52,13 @@ class Client(Frame):
 				c[1].grid(row=2*i+1, column=6, columnspan=6)
 				c[2].pack()
 
-		self.quitbutton = Button(self, text="Quit", command=self.quit)
-		self.quitbutton.grid(row=13, column=5, columnspan=2)
+		self.connectbutton = Button(self, text="connect", background="#05f", activebackground="#03d", foreground="#fff", activeforeground="#fff", borderwidth=0, command=self.pullSettings)
+		self.connectbutton.grid(row=13, column=3, columnspan=4)
+		self.quitbutton = Button(self, text="close", background="#05f", activebackground="#03d", foreground="#fff", activeforeground="#fff", borderwidth=0, command=self.quit)
+		self.quitbutton.grid(row=13, column=8, columnspan=3)
+
+	def pullSettings(self):
+		pass
 
 	def receiver(self):
 		while True:
